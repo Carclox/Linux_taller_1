@@ -1,96 +1,66 @@
+// test_meminfo.c
+#include <stdio.h>
+#include <stdlib.h> // Para EXIT_SUCCESS, EXIT_FAILURE
+#include <string.h> // Para strstr, aunque no se usa directamente en este test
+
 #include "meminfo_manip.h"
-#include <stdio.h> // Se añade para FILE y operaciones de archivo
-#include <string.h> // Se añade para strstr
 
-// La declaración de 'output_file' y 'mem_file' (o sus reemplazos)
-// deben estar en main.c y pasarse como FILE* a estas funciones.
+int main() {
+    printf("Iniciando prueba del modulo meminfo_manip...\n");
 
-// Función para obtener información de la memoria y escribirla en un archivo.
-// Ahora recibe un apuntador al archivo de salida como parámetro.
-int meminfo(FILE *output_data2_file) {
-    /*
-    Esta función accede a la información de la memoria a través de /proc/meminfo/
-    y escribe el contenido directamente en el archivo apuntado por 'output_data2_file'.
-    */
-    FILE *meminfo_proc;
-    char buffer[256];
+    const char *test_data2_filename = "test_data2.txt"; // Archivo para simular data2.txt
+    const char *test_output_filename = "test_datos.txt"; // Archivo para simular datos.txt
 
-    // Verificar si el apuntador al archivo de salida es válido
-    if (output_data2_file == NULL) {
-        perror("Error: El apuntador al archivo de salida para meminfo es NULL.");
-        return 1;
+    FILE *test_data2_file = NULL;
+    FILE *test_output_file = NULL;
+
+    // --- PRUEBA DE meminfo() ---
+    printf("\n--- Probando meminfo() ---\n");
+    // Abrir test_data2.txt en modo escritura/lectura
+    test_data2_file = fopen(test_data2_filename, "w+");
+    if (test_data2_file == NULL) {
+        perror("Error al abrir test_data2.txt para meminfo()");
+        return EXIT_FAILURE;
     }
 
-    // Leer información de memoria de /proc/meminfo
-    meminfo_proc = fopen("/proc/meminfo", "r");
-    if (meminfo_proc != NULL) {
-        fprintf(output_data2_file, "=== Información de Memoria ===\n");
-        while (fgets(buffer, sizeof(buffer), meminfo_proc) != NULL) {
-            fprintf(output_data2_file, "%s", buffer);
-        }
-        fclose(meminfo_proc);
+    printf("Llamando a meminfo() para generar %s...\n", test_data2_filename);
+    int meminfo_result = meminfo(test_data2_file);
+    if (meminfo_result == 0) {
+        printf("meminfo() ejecutado con exito. Contenido escrito en %s.\n", test_data2_filename);
     } else {
-        fprintf(output_data2_file, "No se pudo acceder a /proc/meminfo\n");
+        fprintf(stderr, "Error al ejecutar meminfo(). Codigo de error: %d\n", meminfo_result);
+        fclose(test_data2_file);
+        return EXIT_FAILURE;
     }
 
-    // No se cierra 'output_data2_file' aquí, se deja abierto para que main.c lo cierre
-    return 0;
-}
+    // --- PRUEBA DE process_memory_info() ---
+    printf("\n--- Probando process_memory_info() ---\n");
 
-// Función para procesar la información de la memoria desde un archivo y escribir en otro.
-// Ahora recibe los apuntadores a los archivos de entrada y salida como parámetros.
-void process_memory_info(FILE *mem_input_file, FILE *output_report_file) {
-    char line[256];
-    long long mem_total_kb = 0;
-    long long mem_free_kb = 0;
-    long long swap_total_kb = 0;
-    long long swap_free_kb = 0;
-
-    // Verificar si los apuntadores a los archivos son válidos
-    if (mem_input_file == NULL) {
-        perror("Error: El apuntador al archivo de entrada de memoria es NULL.");
-        return;
-    }
-    if (output_report_file == NULL) {
-        perror("Error: El apuntador al archivo de salida de reporte es NULL.");
-        return;
+    // Abrir test_datos.txt en modo append
+    test_output_file = fopen(test_output_filename, "a");
+    if (test_output_file == NULL) {
+        perror("Error al abrir test_datos.txt para process_memory_info()");
+        fclose(test_data2_file); // Asegurarse de cerrar el primer archivo
+        return EXIT_FAILURE;
     }
 
-    // Rebovinar el archivo de entrada si es necesario (para múltiples lecturas o si ya fue usado)
-    fseek(mem_input_file, 0, SEEK_SET);
+    printf("Llamando a process_memory_info() para procesar %s y escribir en %s...\n",
+           test_data2_filename, test_output_filename);
 
-    while (fgets(line, sizeof(line), mem_input_file) != NULL) {
-        if (strstr(line, "MemTotal:")) {
-            sscanf(line, "MemTotal: %lld kB", &mem_total_kb);
-        } else if (strstr(line, "MemFree:")) {
-            sscanf(line, "MemFree: %lld kB", &mem_free_kb);
-        } else if (strstr(line, "SwapTotal:")) {
-            sscanf(line, "SwapTotal: %lld kB", &swap_total_kb);
-        } else if (strstr(line, "SwapFree:")) {
-            sscanf(line, "SwapFree: %lld kB", &swap_free_kb);
-        }
-    }
-    // No se cierra 'mem_input_file' aquí, se deja abierto para que main.c lo cierre
+    // Asegurarse de que el cursor de test_data2_file esté al inicio para process_memory_info
+    // (aunque process_memory_info ya tiene un fseek, es buena práctica aquí también)
+    fseek(test_data2_file, 0, SEEK_SET);
 
-    // Actuales calculos en GB, modificar el factor de conversion para obtenerlos en MB
-    double mem_total_gb = (double)mem_total_kb / (1024 * 1024);
-    double mem_free_gb = (double)mem_free_kb / (1024 * 1024);
-    double mem_used_gb = mem_total_gb - mem_free_gb;
-    double mem_usage_percent = (mem_total_gb > 0) ? (double)mem_used_gb / mem_total_gb * 100 : 0.00;
+    process_memory_info(test_data2_file, test_output_file);
+    printf("process_memory_info() ejecutado con exito. Reporte añadido a %s.\n", test_output_filename);
 
-    double swap_total_gb = (double)swap_total_kb / (1024 * 1024);
-    double swap_free_gb = (double)swap_free_kb / (1024 * 1024);
-    double swap_used_gb = swap_total_gb - swap_free_gb;
-    double swap_usage_percent = (swap_total_kb > 0) ? (double)swap_used_gb / swap_total_gb * 100 : 0.00;
+    // --- Cierre de archivos ---
+    printf("\nCerrando archivos de prueba...\n");
+    fclose(test_data2_file);
+    fclose(test_output_file);
 
-    fprintf(output_report_file, "| Memoria Física: %.2f GB Instalada\n", mem_total_gb);
-    fprintf(output_report_file, "| Uso de Memoria: %.2f %% (%.2f GB / %.2f GB)\n",
-            mem_usage_percent, mem_used_gb, mem_total_gb);
-    fprintf(output_report_file, "----------------------------------------\n");
-    fprintf(output_report_file, "| Intercambio (Swap): %.2f GB Total\n", swap_total_gb);
-    fprintf(output_report_file, "| Uso de Swap: %.2f %% (%.2f GB / %.2f GB)\n",
-            swap_usage_percent, swap_used_gb, swap_total_gb);
-    fprintf(output_report_file, "----------------------------------------\n");
+    printf("Archivos cerrados. Puede revisar '%s' y '%s'.\n", test_data2_filename, test_output_filename);
 
-    // No se cierra 'output_report_file' aquí, se deja abierto para que main.c lo cierre
+    printf("Prueba de meminfo_manip finalizada.\n");
+    return EXIT_SUCCESS;
 }
