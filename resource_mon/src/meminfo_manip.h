@@ -1,9 +1,14 @@
+#ifndef MEMINFO_MANIP_H
+#define MEMINFO_MANIP_H
+
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdatomic.h>
 #include <stdbool.h>
-#include <threads.h>
-#include <unistd.h>
-#include <signal.h>
-#include <termios.h> // Para la manipulación del terminal
 #include<string.h>
+
+const char *mem_file = "data2.txt";
+const char *output_file;
+
+int meminfo();
+void process_memory_info();
+
+#endif // MEMINFO_MANIP_H

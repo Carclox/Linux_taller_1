@@ -1,7 +1,8 @@
-#include<cpuinfo_manip.h>
+#include "cpuinfo_manip.h"
 
-const char *cpu_file = "data1.txt";
-extern const char *output_file; 
+//const char *cpu_file = "data1.txt";
+//const char *output_file; 
+//extern const char *output_file; 
 
 int cpu_info(){
     /*
@@ -11,7 +12,7 @@ int cpu_info(){
     FILE *cpuinfo, *output;
     char buffer[256];
 
-    // Abrir el archivo de salida
+    // crear el archivo de salida
     output = fopen("data1.txt", "w");
     if (output == NULL) {
         perror("Error al crear data1.txt");

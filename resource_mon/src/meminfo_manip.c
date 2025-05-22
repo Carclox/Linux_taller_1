@@ -1,5 +1,7 @@
-#include<meminfo_manip.h>
+#include "meminfo_manip.h"
 
+
+// estas variables ya no deben estar aqui, deben declararse en el archivo main.c
 const char *mem_file = "data2.txt";
 extern const char *output_file;
 
