@@ -112,7 +112,7 @@ void data_processing() {
         // Cerrar el archivo de reporte después de que ambas funciones de procesamiento lo usen
         fclose(final_output_file);
 
-        // --- Visualización del reporte final (datos.txt) ---
+        // --- Visualización del reporte final (datos.txt) --- //
         FILE *output_read = fopen(final_output_filename, "r");
         if (output_read != NULL) {
             char line[256];
@@ -125,17 +125,16 @@ void data_processing() {
         }
 
         // --- Cierre de archivos al final de la iteración ---
-        // ¡Importante! Asegurarse de cerrar todos los archivos abiertos en esta iteración.
         fclose(mem_data_file);
         fclose(cpu_data_file);
 
-        sleep(1); // Simulación de la tarea principal
+        sleep(1); 
     }
 
     printf("Procesamiento de datos terminado.\n");
 }
 
-// Función para detener el programa (manejador de señal)
+// Función para detener el programa en segundo plano (manejador de señal)
 void sigusr1_handler(int ignore) {
     // Esta función está vacía intencionalmente; solo sirve para interrumpir `sleep`.
 }

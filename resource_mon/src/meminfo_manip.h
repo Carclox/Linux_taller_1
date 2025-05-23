@@ -5,10 +5,8 @@
 #include <stdbool.h>
 #include<string.h>
 
-const char *mem_file = "data2.txt";
-const char *output_file;
 
-int meminfo();
-void process_memory_info();
+int meminfo(FILE *output_data2_file);
+void process_memory_info(FILE *mem_input_file, FILE *output_report_file);
 
 #endif // MEMINFO_MANIP_H

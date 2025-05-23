@@ -1,7 +1,5 @@
 #include "cpuinfo_manip.h"
-#include <stdio.h> // Para FILE y operaciones de archivo como fopen, fclose, perror, fprintf, fgets, sscanf
-#include <string.h> // Para strstr
-#include <stdbool.h> // Para el tipo bool
+
 
 // Las variables globales de nombres de archivo han sido eliminadas de este módulo.
 

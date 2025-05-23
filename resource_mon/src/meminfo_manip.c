@@ -1,6 +1,5 @@
 #include "meminfo_manip.h"
-#include <stdio.h> // Se añade para FILE y operaciones de archivo
-#include <string.h> // Se añade para strstr
+
 
 int meminfo(FILE *output_data2_file) {
     /*
