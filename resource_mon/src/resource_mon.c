@@ -31,18 +31,14 @@ Sección de declaración de variables globales
 
 // Variable global para la bandera de salida. Esta sí es apropiada como global.
 atomic_bool shouldexit = ATOMIC_VAR_INIT(false);
-
-// Las variables globales de nombres de archivo han sido eliminadas de aquí.
-// Ahora se manejarán como variables locales dentro de data_processing.
-// extern const char *mem_file; // ELIMINADO
-// extern const char *cpu_file; // ELIMINADO
-// const char *output_file = "datos.txt"; // ELIMINADO
-
 // ---------------------------------------------------- //
 
 /*
 Sección de declaración y prototipado de funciones
 */
+
+
+
 
 // Función que recopila todo el proceso de tratamiento de datos
 void data_processing() {
@@ -59,7 +55,7 @@ void data_processing() {
     while (!atomic_load(&shouldexit)) {
         system(CLEAR); // Limpiar la terminal
 
-        // --- Apertura y manejo de archivos para la iteración actual ---
+        // --- Apertura y manejo de archivos para la iteración actual --- //
 
         // 1. Abrir data2.txt para la información de memoria
         // Usamos "w+" para crear/truncar y permitir lectura/escritura (necesario para fseek)
