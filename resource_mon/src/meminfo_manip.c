@@ -33,6 +33,10 @@ int meminfo(FILE *output_data2_file) {
 
 // Función para procesar la información de la memoria desde un archivo y escribir en otro.
 // Ahora recibe los apuntadores a los archivos de entrada y salida como parámetros.
+#include <stdio.h> // Para FILE, fprintf, perror, fseek, fgets, sscanf, NULL
+#include <string.h> // Para strstr
+
+// La función permanece igual, solo cambian los cálculos y el formato de impresión
 void process_memory_info(FILE *mem_input_file, FILE *output_report_file) {
     char line[256];
     long long mem_total_kb = 0;
@@ -66,24 +70,27 @@ void process_memory_info(FILE *mem_input_file, FILE *output_report_file) {
     }
     // No se cierra 'mem_input_file' aquí, se deja abierto para que main.c lo cierre
 
-    // Actuales calculos en GB, modificar el factor de conversion para obtenerlos en MB
-    double mem_total_gb = (double)mem_total_kb / (1024 * 1024);
-    double mem_free_gb = (double)mem_free_kb / (1024 * 1024);
-    double mem_used_gb = mem_total_gb - mem_free_gb;
-    double mem_usage_percent = (mem_total_gb > 0) ? (double)mem_used_gb / mem_total_gb * 100 : 0.00;
+    // --- ¡Cálculos en Megabytes! ---
+    // 1 MB = 1024 KB
+    double mem_total_mb = (double)mem_total_kb / 1024.0;
+    double mem_free_mb = (double)mem_free_kb / 1024.0;
+    double mem_used_mb = mem_total_mb - mem_free_mb;
+    double mem_usage_percent = (mem_total_mb > 0) ? (double)mem_used_mb / mem_total_mb * 100 : 0.00;
 
-    double swap_total_gb = (double)swap_total_kb / (1024 * 1024);
-    double swap_free_gb = (double)swap_free_kb / (1024 * 1024);
-    double swap_used_gb = swap_total_gb - swap_free_gb;
-    double swap_usage_percent = (swap_total_kb > 0) ? (double)swap_used_gb / swap_total_gb * 100 : 0.00;
+    double swap_total_mb = (double)swap_total_kb / 1024.0;
+    double swap_free_mb = (double)swap_free_kb / 1024.0;
+    double swap_used_mb = swap_total_mb - swap_free_mb;
+    double swap_usage_percent = (swap_total_mb > 0) ? (double)swap_used_mb / swap_total_mb * 100 : 0.00;
+    // --- Fin de cálculos en Megabytes ---
 
-    fprintf(output_report_file, "| Memoria Física: %.2f GB Instalada\n", mem_total_gb);
-    fprintf(output_report_file, "| Uso de Memoria: %.2f %% (%.2f GB / %.2f GB)\n",
-            mem_usage_percent, mem_used_gb, mem_total_gb);
+    // --- ¡Impresión en Megabytes! ---
+    fprintf(output_report_file, "| Memoria Física: %.2f MB Instalada\n", mem_total_mb);
+    fprintf(output_report_file, "| Uso de Memoria: %.2f %% (%.2f MB / %.2f MB)\n",
+            mem_usage_percent, mem_used_mb, mem_total_mb);
     fprintf(output_report_file, "----------------------------------------\n");
-    fprintf(output_report_file, "| Intercambio (Swap): %.2f GB Total\n", swap_total_gb);
-    fprintf(output_report_file, "| Uso de Swap: %.2f %% (%.2f GB / %.2f GB)\n",
-            swap_usage_percent, swap_used_gb, swap_total_gb);
+    fprintf(output_report_file, "| Intercambio (Swap): %.2f MB Total\n", swap_total_mb);
+    fprintf(output_report_file, "| Uso de Swap: %.2f %% (%.2f MB / %.2f MB)\n",
+            swap_usage_percent, swap_used_mb, swap_total_mb);
     fprintf(output_report_file, "----------------------------------------\n");
 
     // No se cierra 'output_report_file' aquí, se deja abierto para que main.c lo cierre

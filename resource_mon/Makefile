@@ -10,14 +10,15 @@ CFLAGS = -Wall -Wextra -pthread -std=c11 # -pthread es crucial para atomic_load/
 #LIBS = -lm # Ejemplo: si usas funciones matemáticas
 
 # Fuentes de los ejecutables principales y de test
-RESOURCE_MON_SRC = $(SRC_DIR)resource_mon.c $(SRC_DIR)cpuinfo_manip.c $(SRC_DIR)meminfo_manip.c $(SRC_DIR)tui_manip.c
+RESOURCE_MON_SRC = $(SRC_DIR)resource_mon.c $(SRC_DIR)cpuinfo_manip.c $(SRC_DIR)meminfo_manip.c $(SRC_DIR)tui.c
 TESTS_SRCS = $(SRC_DIR)cpuinfo_test.c $(SRC_DIR)meminfo_test.c $(SRC_DIR)tui_test.c
 
 # Objetos correspondientes a las fuentes
 RESOURCE_MON_OBJS = $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(RESOURCE_MON_SRC))
 TESTS_OBJS_CPUINFO = $(OBJ_DIR)cpuinfo_test.o $(OBJ_DIR)cpuinfo_manip.o
 TESTS_OBJS_MEMINFO = $(OBJ_DIR)meminfo_test.o $(OBJ_DIR)meminfo_manip.o
-TESTS_OBJS_TUI = $(OBJ_DIR)tui_test.o $(OBJ_DIR)tui_manip.o # Suponiendo que tui_manip.c contiene funciones relacionadas con tui_test
+TESTS_OBJS_TUI = $(OBJ_DIR)tui_test.o $(OBJ_DIR)tui.o
+# Suponiendo que tui_manip.c contiene funciones relacionadas con tui_test
 
 # Ejecutables
 RESOURCE_MON_EXEC = $(BIN_DIR)resource_mon

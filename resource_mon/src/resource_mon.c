@@ -135,7 +135,7 @@ void data_processing() {
 }
 
 // Función para detener el programa en segundo plano (manejador de señal)
-void sigusr1_handler(int ignore) {
+void sigusr1_handler(int /*ignore*/) {
     // Esta función está vacía intencionalmente; solo sirve para interrumpir `sleep`.
 }
 

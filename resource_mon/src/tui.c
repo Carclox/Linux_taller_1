@@ -1,7 +1,8 @@
-#include<tui.h>
+#include "tui.h"
 
 // Función para monitorear la entrada de la tecla 'q' y detener el programa
 int monitor_quit(void *arg) {
+	(void)arg; // esto hace ignorar la advertencia
     struct termios old_termios, new_termios;
 
     // Obtener la configuración actual del terminal
@@ -28,6 +29,7 @@ int monitor_quit(void *arg) {
     }
 
     // Restaurar la configuración original del terminal
-        (STDIN_FILENO, TCSANOW, &old_termios);
+        //(STDIN_FILENO, TCSANOW, &old_termios);
+	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
     return 0; // La función del hilo debe retornar un entero
 }

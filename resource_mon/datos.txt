@@ -1,0 +1,13 @@
+----------------------------------------
+| Monitor de Recursos                     |
+----------------------------------------
+| CPU: Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
+| Núcleos: 6
+| Hilos: Reales 11, Virtuales 12
+----------------------------------------
+| Memoria Física: 11889.17 MB Instalada
+| Uso de Memoria: 4.43 % (527.26 MB / 11889.17 MB)
+----------------------------------------
+| Intercambio (Swap): 3072.00 MB Total
+| Uso de Swap: 0.00 % (0.00 MB / 3072.00 MB)
+----------------------------------------

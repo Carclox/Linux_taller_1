@@ -1,5 +1,5 @@
-#ifndef "TUI_H"
-#define "TUI_H"
+#ifndef TUI_H
+#define TUI_H
 
 
 #include <stdio.h>
@@ -11,6 +11,8 @@
 #include <signal.h>
 #include <termios.h> // Para la manipulación del terminal
 #include<string.h>
+
+extern _Atomic bool shouldexit;
 
 int monitor_quit(void *arg);
 
