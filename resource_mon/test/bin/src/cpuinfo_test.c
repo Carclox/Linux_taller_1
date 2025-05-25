@@ -1,10 +1,9 @@
 // test cpu_info.c
-
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 
-#include "cpuinfo_manip.h"
+#include "cpuinfo_manip.h" // Asegúrate de que cpu_info y process_cpu_info estén declarados aquí
 
 //-----------------------------//
 
@@ -19,42 +18,46 @@ int main(){
     FILE *test_output_file =NULL;
 
 
-    // prueba de cpuinfo
+    // prueba de cpu_info
 
-    printf("\n --- probando cpuinfo() ---\n");
+    printf("\n --- probando cpu_info() ---\n");
 
     test_data1_file = fopen(test_data1_filename, "w+");
     if (test_data1_file == NULL){
-        perror("Error al abrir test_data2.txt para cpuinfo()");
+        // Corregido: Referencia al archivo de prueba correcto y nombre de la función
+        perror("Error al abrir test_data1.txt para cpu_info()");
         return EXIT_FAILURE;
     }
-    printf("Llamando a cpuinfo() para generar  %s ... \n ", test_data1_filename);
-    int cpuinfo_result = cpuinfo(test_data1_file);
-    if (cpuinfo-result == 0){
-        printf("cpuinfo() ejecutado con exito contenido guardado en %s. \n",test_data1_filename);
+    printf("Llamando a cpu_info() para generar  %s ... \n ", test_data1_filename);
+    // CORREGIDO: cpui_nfo -> cpu_info
+    int cpuinfo_result = cpu_info(test_data1_file);
+    if (cpuinfo_result == 0){
+        printf("cpu_info() ejecutado con exito contenido guardado en %s. \n",test_data1_filename);
     }else{
-        fprintf(stdrr, "Error al ejecutar cpuinfo(). codigo de error %d\n",cpuinfo_result);
+        // CORREGIDO: stdrr -> stderr y nombre de la función
+        fprintf(stderr, "Error al ejecutar cpu_info(). codigo de error %d\n",cpuinfo_result);
         fclose(test_data1_file);
         return EXIT_FAILURE;
     }
 
     // PRUEBA DE process_cpu_info()
 
-    printf("--- probando process_cpu_info() ---");
-    
-    test_oputput_file = fopen(test_output_filename, "a");
+    printf("--- probando process_cpu_info() ---\n"); // Añadido \n para mejor formato
+
+    // Ya no es necesario corregir test_oputput_file, ya lo habías corregido en el código anterior
+    test_output_file = fopen(test_output_filename, "a");
     if (test_output_file == NULL){
         perror("Error al abrir test_datos.txt para process_cpu_info()");
         fclose(test_data1_file);
         return EXIT_FAILURE;
     }
     printf("llamando a process_cpu_info() para procesar %s y escribir en %s... \n", test_data1_filename,test_output_filename);
-    
+
     fseek(test_data1_file,0, SEEK_SET);
     process_cpu_info(test_data1_file, test_output_file);
     printf("process_cpu_info() ejecutado con exito. reporte agregado a %s. \n", test_output_filename);
 
-    // cierre de los 
+    // cierre de los archivos
     printf("\n --- cerrando archivos --- \n");
     fclose(test_data1_file);
     fclose(test_output_file);

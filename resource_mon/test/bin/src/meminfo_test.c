@@ -1,15 +1,16 @@
 // test_meminfo.c
 #include <stdio.h>
 #include <stdlib.h> // Para EXIT_SUCCESS, EXIT_FAILURE
-#include <string.h> // Para strstr, aunque no se usa directamente en este test
+// string.h no es estrictamente necesario si no se usa directamente en este test
+// #include <string.h>
 
-#include "meminfo_manip.h"
+#include "meminfo_manip.h" // Incluye las declaraciones de meminfo() y process_memory_info()
 
 int main() {
     printf("Iniciando prueba del modulo meminfo_manip...\n");
 
-    const char *test_data2_filename = "test_data2.txt"; // Archivo para simular data2.txt
-    const char *test_output_filename = "test_datos.txt"; // Archivo para simular datos.txt
+    const char *test_data2_filename = "test_data2.txt";   // Archivo para simular /proc/meminfo
+    const char *test_output_filename = "test_datos.txt"; // Archivo para simular el reporte de salida
 
     FILE *test_data2_file = NULL;
     FILE *test_output_file = NULL;
@@ -19,17 +20,20 @@ int main() {
     // Abrir test_data2.txt en modo escritura/lectura
     test_data2_file = fopen(test_data2_filename, "w+");
     if (test_data2_file == NULL) {
+        // Mensaje de error corregido para reflejar 'test_data2.txt'
         perror("Error al abrir test_data2.txt para meminfo()");
         return EXIT_FAILURE;
     }
 
     printf("Llamando a meminfo() para generar %s...\n", test_data2_filename);
+    // Asumiendo que la función se llama 'meminfo' en meminfo_manip.h/c
     int meminfo_result = meminfo(test_data2_file);
     if (meminfo_result == 0) {
         printf("meminfo() ejecutado con exito. Contenido escrito en %s.\n", test_data2_filename);
     } else {
+        // 'stderr' ya estaba correcto aquí
         fprintf(stderr, "Error al ejecutar meminfo(). Codigo de error: %d\n", meminfo_result);
-        fclose(test_data2_file);
+        fclose(test_data2_file); // Asegurarse de cerrar el archivo en caso de error
         return EXIT_FAILURE;
     }
 
@@ -47,10 +51,10 @@ int main() {
     printf("Llamando a process_memory_info() para procesar %s y escribir en %s...\n",
            test_data2_filename, test_output_filename);
 
-    // Asegurarse de que el cursor de test_data2_file esté al inicio para process_memory_info
-    // (aunque process_memory_info ya tiene un fseek, es buena práctica aquí también)
+    // Asegurarse de que el cursor de test_data2_file esté al inicio
     fseek(test_data2_file, 0, SEEK_SET);
 
+    // Asumiendo que la función se llama 'process_memory_info' en meminfo_manip.h/c
     process_memory_info(test_data2_file, test_output_file);
     printf("process_memory_info() ejecutado con exito. Reporte añadido a %s.\n", test_output_filename);
 

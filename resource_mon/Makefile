@@ -5,30 +5,23 @@ SRC_DIR = ./src/
 
 # Compilador y Banderas
 CC = gcc
-CFLAGS = -Wall -Wextra -pthread -std=c11 # -pthread es crucial para atomic_load/store y tui.h puede requerir un C más moderno
-#LDFLAGS = -L. # Si tienes alguna librería personalizada en el directorio actual, si no, puedes quitarlo
-#LIBS = -lm # Ejemplo: si usas funciones matemáticas
+CFLAGS = -Wall -Wextra -pthread -std=c11
 
-# Fuentes de los ejecutables principales y de test
+# Fuentes de los ejecutables principales (solo los que están en resource_mon/src/)
 RESOURCE_MON_SRC = $(SRC_DIR)resource_mon.c $(SRC_DIR)cpuinfo_manip.c $(SRC_DIR)meminfo_manip.c $(SRC_DIR)tui.c
-TESTS_SRCS = $(SRC_DIR)cpuinfo_test.c $(SRC_DIR)meminfo_test.c $(SRC_DIR)tui_test.c
 
-# Objetos correspondientes a las fuentes
+# Objetos correspondientes a las fuentes principales
 RESOURCE_MON_OBJS = $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(RESOURCE_MON_SRC))
-TESTS_OBJS_CPUINFO = $(OBJ_DIR)cpuinfo_test.o $(OBJ_DIR)cpuinfo_manip.o
-TESTS_OBJS_MEMINFO = $(OBJ_DIR)meminfo_test.o $(OBJ_DIR)meminfo_manip.o
-TESTS_OBJS_TUI = $(OBJ_DIR)tui_test.o $(OBJ_DIR)tui.o
-# Suponiendo que tui_manip.c contiene funciones relacionadas con tui_test
 
 # Ejecutables
 RESOURCE_MON_EXEC = $(BIN_DIR)resource_mon
-CPUINFO_TEST_EXEC = $(BIN_DIR)cpuinfo_test
-MEMINFO_TEST_EXEC = $(BIN_DIR)meminfo_test
-TUI_TEST_EXEC = $(BIN_DIR)tui_test
 
-# Regla por defecto: construye 'all'
+# Definimos la ubicación del Makefile de tests (el "coordinador")
+TEST_MAKEFILE_DIR = test/bin/
+
+# Regla por defecto: construye 'all' (ahora llama a resource_mon y a tests)
 .PHONY: all
-all: $(RESOURCE_MON_EXEC) $(CPUINFO_TEST_EXEC) $(MEMINFO_TEST_EXEC) $(TUI_TEST_EXEC)
+all: resource_mon tests
 
 # Regla para resource_mon
 .PHONY: resource_mon
@@ -39,32 +32,20 @@ $(RESOURCE_MON_EXEC): $(RESOURCE_MON_OBJS)
 	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
 	@echo "Construido: $@"
 
-# Regla para tests
+# Regla para tests - ¡DELEGA LA CONSTRUCCIÓN AL SUBDIRECTORIO COORDINADOR!
 .PHONY: tests
-tests: $(CPUINFO_TEST_EXEC) $(MEMINFO_TEST_EXEC) $(TUI_TEST_EXEC)
+tests:
+	@echo "Construyendo tests desde $(TEST_MAKEFILE_DIR)..."
+	$(MAKE) -C $(TEST_MAKEFILE_DIR) # Esto ejecuta 'make' en el directorio test/bin/
 
-$(CPUINFO_TEST_EXEC): $(TESTS_OBJS_CPUINFO)
-	@mkdir -p $(@D)
-	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
-	@echo "Construido: $@"
-
-$(MEMINFO_TEST_EXEC): $(TESTS_OBJS_MEMINFO)
-	@mkdir -p $(@D)
-	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
-	@echo "Construido: $@"
-
-$(TUI_TEST_EXEC): $(TESTS_OBJS_TUI) $(OBJ_DIR)cpuinfo_manip.o $(OBJ_DIR)meminfo_manip.o # Agregamos estas dependencias si el test de TUI depende de ellas
-	@mkdir -p $(@D)
-	$(CC) $(LDFLAGS) $^ -o $@ $(LIBS)
-	@echo "Construido: $@"
-
-# Regla genérica para compilar archivos .c a .o en la carpeta obj
+# Regla genérica para compilar archivos .c a .o en la carpeta obj (solo para los .c del SRC_DIR principal)
+# Esta regla compila: resource_mon/src/*.c -> resource_mon/obj/*.o
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 	@echo "Compilado: $< -> $@"
 
-# Regla para limpiar
+# Regla para limpiar (limpia todo el proyecto, incluyendo lo que hacen los tests)
 .PHONY: clean
 clean:
 	@echo "Limpiando..."
@@ -72,4 +53,5 @@ clean:
 	@rm -f $(BIN_DIR)*
 	@rmdir $(OBJ_DIR) 2>/dev/null || true
 	@rmdir $(BIN_DIR) 2>/dev/null || true
+	$(MAKE) -C $(TEST_MAKEFILE_DIR) clean || true # Llama al 'clean' del sub-Makefile de tests
 	@echo "Limpieza completa."
