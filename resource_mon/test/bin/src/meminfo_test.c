@@ -20,18 +20,15 @@ int main() {
     // Abrir test_data2.txt en modo escritura/lectura
     test_data2_file = fopen(test_data2_filename, "w+");
     if (test_data2_file == NULL) {
-        // Mensaje de error corregido para reflejar 'test_data2.txt'
         perror("Error al abrir test_data2.txt para meminfo()");
         return EXIT_FAILURE;
     }
 
     printf("Llamando a meminfo() para generar %s...\n", test_data2_filename);
-    // Asumiendo que la función se llama 'meminfo' en meminfo_manip.h/c
     int meminfo_result = meminfo(test_data2_file);
     if (meminfo_result == 0) {
         printf("meminfo() ejecutado con exito. Contenido escrito en %s.\n", test_data2_filename);
     } else {
-        // 'stderr' ya estaba correcto aquí
         fprintf(stderr, "Error al ejecutar meminfo(). Codigo de error: %d\n", meminfo_result);
         fclose(test_data2_file); // Asegurarse de cerrar el archivo en caso de error
         return EXIT_FAILURE;
@@ -54,7 +51,6 @@ int main() {
     // Asegurarse de que el cursor de test_data2_file esté al inicio
     fseek(test_data2_file, 0, SEEK_SET);
 
-    // Asumiendo que la función se llama 'process_memory_info' en meminfo_manip.h/c
     process_memory_info(test_data2_file, test_output_file);
     printf("process_memory_info() ejecutado con exito. Reporte añadido a %s.\n", test_output_filename);
 

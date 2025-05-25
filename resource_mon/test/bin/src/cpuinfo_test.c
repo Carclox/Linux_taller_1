@@ -3,7 +3,7 @@
 #include<stdlib.h>
 #include<string.h>
 
-#include "cpuinfo_manip.h" // Asegúrate de que cpu_info y process_cpu_info estén declarados aquí
+#include "cpuinfo_manip.h" 
 
 //-----------------------------//
 

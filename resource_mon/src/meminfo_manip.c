@@ -32,10 +32,10 @@ int meminfo(FILE *output_data2_file) {
 }
 
 // Función para procesar la información de la memoria desde un archivo y escribir en otro.
-// Ahora recibe los apuntadores a los archivos de entrada y salida como parámetros.
+// recibe los apuntadores a los archivos de entrada y salida como parámetros.
 
 
-// La función permanece igual, solo cambian los cálculos y el formato de impresión
+
 void process_memory_info(FILE *mem_input_file, FILE *output_report_file) {
     char line[256];
     long long mem_total_kb = 0;

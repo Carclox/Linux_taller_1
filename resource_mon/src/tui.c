@@ -1,4 +1,4 @@
-#include "tui.h" // Incluye todas las cabeceras necesarias y las declaraciones
+#include "tui.h" 
 #include "cpuinfo_manip.h" // Necesario para cpu_info y process_cpu_info
 #include "meminfo_manip.h" // Necesario para meminfo y process_memory_info
 
@@ -43,12 +43,11 @@ int monitor_quit(void *arg) {
     // Restaurar la configuración original del terminal
     if (tcsetattr(STDIN_FILENO, TCSANOW, &old_termios) == -1) {
         perror("tcsetattr old_termios failed in monitor_quit");
-        // No se puede hacer mucho aquí, el error ya ocurrió
     }
     return 0; // La función del hilo debe retornar un entero
 }
 
-// Función que recopila todo el proceso de tratamiento y visualización de datos (MIGRADA desde resource_mon)
+// Función que recopila todo el proceso de tratamiento y visualización de datos
 void data_processing() {
     // Nombres de archivos ahora como variables locales y descriptivas
     const char *mem_data_filename = "data2.txt";

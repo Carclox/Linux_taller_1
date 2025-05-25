@@ -1,6 +1,8 @@
 // Incluimos los headers de los módulos
-#include "cpuinfo_manip.h" // Si main() necesita algo de aquí
-#include "meminfo_manip.h" // Si main() necesita algo de aquí
+#include "cpuinfo_manip.h" // 
+#include "meminfo_manip.h" // estos realmente no se usan aca pero se incluyen igual popr si acaso
+
+// este moduo si es relevante aqui
 #include "tui.h" // Ahora tui.h contendrá la declaración de data_processing, monitor_quit, CLEAR, y extern shouldexit
 
 //---------------------------------------//
@@ -17,7 +19,7 @@ int main() {
 
     // La función monitor_quit debe estar definida en "tui.c" y su declaración en "tui.h"
     // Ya que thrd_create espera una función de tipo thrd_start_t (int (*)(void* arg)),
-    // y monitor_quit cumple con eso.
+    // y monitor_quit está diseñada para eso.
     if (thrd_create(&thr_quit, monitor_quit, NULL) != thrd_success) {
         fprintf(stderr, "Error al crear el hilo monitor_quit.\n");
         return EXIT_FAILURE;
@@ -25,7 +27,6 @@ int main() {
 
 
     // Ejecutar la lógica principal de recolección y gestión de datos en el hilo principal
-    // Ahora data_processing está en tui.c, pero se llama desde aquí.
     data_processing();
 
     printf("Saliendo del programa principal...\n");

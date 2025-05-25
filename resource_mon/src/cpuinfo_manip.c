@@ -1,10 +1,7 @@
 #include "cpuinfo_manip.h"
 
-
-// Las variables globales de nombres de archivo han sido eliminadas de este módulo.
-
 // Función para extraer información de /proc/cpuinfo y escribirla en un archivo.
-// Ahora recibe un apuntador al archivo de salida (data1.txt) como parámetro.
+// recibe un apuntador al archivo de salida (data1.txt) como parámetro.
 int cpu_info(FILE *output_data1_file) {
     /*
     Esta función extrae la información contenida en /proc/cpuinfo/
@@ -35,9 +32,8 @@ int cpu_info(FILE *output_data1_file) {
     return 0;
 }
 
-// Función para procesar la información del CPU desde un archivo
-// y escribir el reporte en otro archivo.
-// Ahora recibe los apuntadores a los archivos de entrada (data1.txt) y salida (datos.txt) como parámetros.
+// Función para procesar la información del CPU desde un archivo y escribir el reporte en otro archivo.
+// recibe los apuntadores a los archivos de entrada (data1.txt) y salida (datos.txt) como parámetros.
 void process_cpu_info(FILE *cpu_input_file, FILE *output_report_file) {
     char line[256];
     char model_name[128] = "Desconocido";

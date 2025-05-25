@@ -1,8 +1,8 @@
 
-#include "tui.h" // Incluye la declaración de monitor_quit y 'extern atomic_bool shouldexit'
-                 // y la macro CLEAR
+#include "tui.h" 
 
-// printer() debe retornar un int, ya que es una función que podría ser usada por thrd_create si quisieras
+
+// printer() debe retornar un int, ya que es una función que podría ser usada por thrd_create 
 int printer() {
     // La variable 'shouldexit' es externa, definida en resource_mon.c y declarada en tui.h
     extern atomic_bool shouldexit;
@@ -19,7 +19,7 @@ int printer() {
     return 0; // Las funciones de hilo deben retornar un int
 }
 
-// Handler para la señal SIGUSR1 (puede ser necesario si usas raise(SIGUSR1) para interrumpir hilos bloqueados)
+// Handler para la señal SIGUSR1 (puede ser necesario si se usa SIGUSR1 para interrumpir hilos bloqueados)
 // Si el objetivo es solo detener el bucle, la variable atómica es más directa.
 void sigusr1_handler(int ignore) {
     // Este handler puede estar vacío si solo se usa para interrumpir llamadas a sistema

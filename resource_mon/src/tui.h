@@ -18,11 +18,11 @@
 #define CLEAR "clear"
 #endif
 
-// DECLARACIÓN de la variable atómica global (¡SOLO DECLARACIÓN AQUÍ!)
+// DECLARACIÓN de la variable atómica global
 extern atomic_bool shouldexit;
 
 // Declaración de funciones del módulo TUI
 int monitor_quit(void *arg);
-void data_processing(); // Nueva declaración para la función que migramos
+void data_processing(); 
 
 #endif // TUI_H

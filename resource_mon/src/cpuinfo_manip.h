@@ -6,7 +6,6 @@
 #include <stdbool.h> // Para el tipo bool
 
 // Declaración de funciones
-// Estas son las funciones que otros módulos podrán llamar
 int cpu_info(FILE *output_data1_file);
 void process_cpu_info(FILE *cpu_input_file, FILE *output_report_file);
 
