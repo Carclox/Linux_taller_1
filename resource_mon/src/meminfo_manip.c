@@ -33,8 +33,7 @@ int meminfo(FILE *output_data2_file) {
 
 // Función para procesar la información de la memoria desde un archivo y escribir en otro.
 // Ahora recibe los apuntadores a los archivos de entrada y salida como parámetros.
-#include <stdio.h> // Para FILE, fprintf, perror, fseek, fgets, sscanf, NULL
-#include <string.h> // Para strstr
+
 
 // La función permanece igual, solo cambian los cálculos y el formato de impresión
 void process_memory_info(FILE *mem_input_file, FILE *output_report_file) {
